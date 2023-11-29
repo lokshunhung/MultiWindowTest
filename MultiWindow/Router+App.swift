@@ -8,16 +8,16 @@
 import UIKit
 
 extension Router {
-    static let app = appRouter()
-
-    private static func appRouter() -> Router {
-        Router.Builder()
+    static func appRouter() -> Router {
+        var router: Router!
+        router = Router.Builder()
             .register(ViewControllerRoute.self) { route in
-                let viewController = ViewController(nibName: nil, bundle: nil)
-                let navigation = UINavigationController(rootViewController: viewController)
-                navigation.navigationBar.prefersLargeTitles = true
-                return navigation
+                ViewController(router: router)
+            }
+            .register(SecondaryViewControllerRoute.self) { route in
+                SecondaryViewController(router: router)
             }
             .build()
+        return router
     }
 }

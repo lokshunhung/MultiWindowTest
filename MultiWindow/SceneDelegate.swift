@@ -11,7 +11,7 @@ import os.log
 final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    let router: Router = .app
+    let router: Router = .appRouter()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         Logger.scene.info(#function)
@@ -24,7 +24,9 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         defer { self.window = window }
 
-        window.rootViewController = router.lookup(ViewControllerRoute())
+        let rootViewController = router.lookup(ViewControllerRoute())
+        let navigation = UINavigationController(rootViewController: rootViewController)
+        window.rootViewController = navigation
         window.makeKeyAndVisible()
     }
 
