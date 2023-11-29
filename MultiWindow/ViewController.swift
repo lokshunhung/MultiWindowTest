@@ -8,7 +8,7 @@
 import UIKit
 import os.log
 
-final class ViewControllerRoute: Route {}
+struct ViewControllerRoute: Route {}
 
 final class ViewController: UIViewController {
 
