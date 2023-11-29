@@ -8,9 +8,6 @@
 import UIKit
 
 protocol Route {}
-extension Route {
-    static var metatypeName: String { _typeName(Self.self, qualified: true) }
-}
 
 final class Router {
     private let routes: [ObjectIdentifier: (any Route) -> UIViewController]
