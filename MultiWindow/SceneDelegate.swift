@@ -11,6 +11,7 @@ import os.log
 final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    let router: Router = .app
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         Logger.scene.info(#function)
@@ -23,11 +24,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         defer { self.window = window }
 
-        let viewController = ViewController(nibName: nil, bundle: nil)
-        let navigation = UINavigationController(rootViewController: viewController)
-        navigation.navigationBar.prefersLargeTitles = true
-
-        window.rootViewController = navigation
+        window.rootViewController = router.lookup(ViewControllerRoute())
         window.makeKeyAndVisible()
     }
 

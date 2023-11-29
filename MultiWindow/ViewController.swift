@@ -8,7 +8,9 @@
 import UIKit
 import os.log
 
-class ViewController: UIViewController {
+final class ViewControllerRoute: Route {}
+
+final class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
