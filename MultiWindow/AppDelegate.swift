@@ -24,7 +24,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Called when a new scene session is being created.
         // Use this method to select a configuration to create the new scene with.
-        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+        return .from(connectingSceneSession: connectingSceneSession, options: options)
     }
 
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
@@ -35,6 +35,32 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 
+}
+
+private extension UISceneConfiguration {
+    static func from(connectingSceneSession: UISceneSession,
+                     options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+        let sessionRole = connectingSceneSession.role
+        let userActivity = options.userActivities.first ?? connectingSceneSession.stateRestorationActivity
+        let userActivityType = userActivity?.activityType
+
+        switch (sessionRole: sessionRole, userActivityType: userActivityType) {
+
+        case (sessionRole: .windowApplication, userActivityType: "Open Secondary"):
+            let userInfo: [String: Any] = [
+                "NSUserActivityType": "Open Secondary",
+            ]
+            connectingSceneSession.userInfo = (connectingSceneSession.userInfo ?? [:])
+                .merging(userInfo, uniquingKeysWith: { $1 })
+            let config = UISceneConfiguration(name: nil, sessionRole: .windowApplication)
+            config.delegateClass = SceneDelegate.self
+            return config
+
+        default:
+            return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+
+        }
+    }
 }
 
 private extension Logger {

@@ -24,7 +24,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         defer { self.window = window }
 
-        let rootViewController = router.lookup(ViewControllerRoute())
+        let rootViewController = router.rootViewController(for: session)
         let navigation = UINavigationController(rootViewController: rootViewController)
         window.rootViewController = navigation
         window.makeKeyAndVisible()
@@ -68,6 +68,20 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 
+}
+
+private extension Router {
+    func rootViewController(for session: UISceneSession) -> UIViewController {
+        switch session.userInfo?["NSUserActivityType"] as? String {
+
+        case "Open Secondary":
+            return self.lookup(SecondaryViewControllerRoute())
+
+        default:
+            return self.lookup(ViewControllerRoute())
+
+        }
+    }
 }
 
 private extension Logger {
