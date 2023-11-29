@@ -55,11 +55,22 @@ final class ViewController: UIViewController {
         let userActivity = NSUserActivity(activityType: "Open Secondary")
         let options = UIScene.ActivationRequestOptions()
         options.requestingScene = view.window?.windowScene
-        UIApplication.shared.requestSceneSessionActivation(
-            nil, // make a new scene session
-            userActivity: userActivity,
-            options: options,
-            errorHandler: nil)
+
+        if #available(iOS 17, *) {
+            let request = UISceneSessionActivationRequest(
+                role: .windowApplication,
+                userActivity: userActivity,
+                options: options)
+            UIApplication.shared.activateSceneSession(
+                for: request,
+                errorHandler: nil)
+        } else {
+            UIApplication.shared.requestSceneSessionActivation(
+                nil, // make a new scene session
+                userActivity: userActivity,
+                options: options,
+                errorHandler: nil)
+        }
     }
 }
 
