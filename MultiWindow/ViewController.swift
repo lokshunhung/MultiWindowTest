@@ -27,26 +27,40 @@ final class ViewController: UIViewController {
         view.backgroundColor = .systemBackground
         title = "View Controller"
 
-        let button = newButton {
-            Logger.viewController.info("clicked")
+        let newWindowButton = newButton(title: "Open in new window") {
+            Logger.viewController.info("clicked new window")
             self.openSecondaryInNewWindow()
         }
-        view.addSubview(button)
+        view.addSubview(newWindowButton)
 
         NSLayoutConstraint.activate([
-            view.centerXAnchor.constraint(equalTo: button.centerXAnchor),
-            view.centerYAnchor.constraint(equalTo: button.centerYAnchor),
-            button.widthAnchor.constraint(equalToConstant: 200),
-            button.heightAnchor.constraint(equalToConstant: 50),
+            view.centerXAnchor.constraint(equalTo: newWindowButton.centerXAnchor),
+            view.centerYAnchor.constraint(equalTo: newWindowButton.centerYAnchor),
+            newWindowButton.widthAnchor.constraint(equalToConstant: 200),
+            newWindowButton.heightAnchor.constraint(equalToConstant: 50),
+        ])
+
+        let navigateButton = newButton(title: "Navigate") {
+            Logger.viewController.info("clicked navigate")
+            let viewController = self.router.lookup(SecondaryViewControllerRoute())
+            self.show(viewController, sender: self)
+        }
+        view.addSubview(navigateButton)
+
+        NSLayoutConstraint.activate([
+            view.centerXAnchor.constraint(equalTo: navigateButton.centerXAnchor),
+            newWindowButton.bottomAnchor.constraint(equalTo: navigateButton.topAnchor, constant: -20),
+            navigateButton.widthAnchor.constraint(equalToConstant: 200),
+            navigateButton.heightAnchor.constraint(equalToConstant: 50),
         ])
     }
 
-    private func newButton(perform: @escaping () -> Void) -> some UIView {
+    private func newButton(title: String, perform: @escaping () -> Void) -> some UIView {
         let button = UIButton(
             primaryAction: UIAction(handler: { action in perform() }))
         button.translatesAutoresizingMaskIntoConstraints = false
         var config: UIButton.Configuration = .filled()
-        config.title = "Click me"
+        config.title = title
         button.configuration = config
         return button
     }
@@ -72,6 +86,7 @@ final class ViewController: UIViewController {
                 errorHandler: nil)
         }
     }
+
 }
 
 private extension Logger {
