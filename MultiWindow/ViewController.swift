@@ -29,8 +29,7 @@ final class ViewController: UIViewController {
 
         let button = newButton {
             Logger.viewController.info("clicked")
-            let viewController = self.router.lookup(SecondaryViewControllerRoute())
-            self.show(viewController, sender: self)
+            self.openSecondaryInNewWindow()
         }
         view.addSubview(button)
 
@@ -52,6 +51,16 @@ final class ViewController: UIViewController {
         return button
     }
 
+    private func openSecondaryInNewWindow() {
+        let userActivity = NSUserActivity(activityType: "Open Secondary")
+        let options = UIScene.ActivationRequestOptions()
+        options.requestingScene = view.window?.windowScene
+        UIApplication.shared.requestSceneSessionActivation(
+            nil, // make a new scene session
+            userActivity: userActivity,
+            options: options,
+            errorHandler: nil)
+    }
 }
 
 private extension Logger {
