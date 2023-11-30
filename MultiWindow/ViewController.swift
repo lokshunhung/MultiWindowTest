@@ -27,8 +27,9 @@ final class ViewController: UIViewController {
         view.backgroundColor = .systemBackground
         title = "View Controller"
 
-        let newWindowButton = newButton(title: "Open in new window") {
+        let newWindowButton = newButton(title: "Open in new window") { [weak self] in
             Logger.viewController.info("clicked new window")
+            guard let self else { return }
             self.openSecondaryInNewWindow()
         }
         view.addSubview(newWindowButton)
@@ -40,8 +41,9 @@ final class ViewController: UIViewController {
             newWindowButton.heightAnchor.constraint(equalToConstant: 50),
         ])
 
-        let navigateButton = newButton(title: "Navigate") {
+        let navigateButton = newButton(title: "Navigate") { [weak self] in
             Logger.viewController.info("clicked navigate")
+            guard let self else { return }
             let viewController = self.router.lookup(SecondaryViewControllerRoute())
             self.show(viewController, sender: self)
         }
